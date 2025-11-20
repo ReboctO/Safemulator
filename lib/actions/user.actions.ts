@@ -1,6 +1,6 @@
 "use server";
 
-import prisma from "@/lib/prisma";
+import prisma from "../../lib/prisma";
 import { revalidatePath } from "next/cache";
 import { UserRole } from "@prisma/client";
 
@@ -10,6 +10,9 @@ export async function fetchUser(clerkId: string) {
       where: { clerkId },
       include: {
         admin: true,
+        staff: true,
+        student:true,
+        dean: true
       },
     });
     return user;

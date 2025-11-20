@@ -1,7 +1,6 @@
 import "../../global.css";
 import { Schibsted_Grotesk, Martian_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
-import { SignOutButton } from '@clerk/nextjs';
 
 const schibstedGrotesk = Schibsted_Grotesk({
   variable: "--font-schibsted-grotesk",
@@ -19,7 +18,7 @@ export default function AdminLayout({
 }>) {
   return (
     <>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className={`${schibstedGrotesk.variable} ${martianMono.variable} antialiased`} >
         {children}
       </div>
       <Toaster />

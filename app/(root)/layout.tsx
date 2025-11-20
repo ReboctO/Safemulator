@@ -1,25 +1,8 @@
-import type { Metadata } from "next";
-import { Schibsted_Grotesk, Martian_Mono } from "next/font/google";
-import { ClerkProvider } from '@clerk/nextjs';
 import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
-import { fetchUser } from '@/lib/actions/user.actions';
+import { fetchUser } from '../../lib/actions/user.actions';
 
-const schibstedGrotesk = Schibsted_Grotesk({
-  variable: "--font-schibsted-grotesk",
-  subsets: ["latin"],
-});
-const martianMono = Martian_Mono({
-  variable: "--font-martian-mono",
-  subsets: ["latin"],
-});
-
-export const metadata: Metadata = {
-  title: "SafeMulator",
-  description: "A Video Game Disaster Drill Simulator",
-};
-
-export default async function RootLayout({
+export default async function AppLayout({
   children,
   admin,
   dean,
@@ -32,17 +15,9 @@ export default async function RootLayout({
 }) {
   const { userId } = await auth();
 
-  // If not authenticated, show landing page
+  // If not authenticated, show landing page (children = page.tsx)
   if (!userId) {
-    return (
-      <ClerkProvider>
-        <html lang="en">
-          <body className={`${schibstedGrotesk.variable} ${martianMono.variable} antialiased`}>
-            {children}
-          </body>
-        </html>
-      </ClerkProvider>
-    );
+    return <>{children}</>;
   }
 
   // Fetch user from database
@@ -54,28 +29,15 @@ export default async function RootLayout({
   }
 
   // Render content based on user role
-  const renderContent = () => {
-    switch (user.role) {
-      case 'ADMIN':
-        return admin;
-      case 'DEAN':
-        return dean;
-      case 'STUDENT':
-        return student;
-      case 'STAFF':
-        return student;
-      default:
-        return children;
-    }
-  };
-
-  return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={`${schibstedGrotesk.variable} ${martianMono.variable} antialiased`}>
-          {renderContent()}
-        </body>
-      </html>
-    </ClerkProvider>
-  );
+  switch (user.role) {
+    case 'ADMIN':
+      return <>{admin}</>;
+    case 'DEAN':
+      return <>{dean}</>;
+    case 'STUDENT':
+    case 'STAFF':
+      return <>{student}</>;
+    default:
+      return <>{children}</>;
+  }
 }
