@@ -1,0 +1,81 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  clerkId   String   @unique
+  username  String   @unique
+  email     String   @unique
+  firstName String
+  lastName  String
+  role      UserRole
+  image     String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations for specific user types
+  admin   Admin?
+  staff   Staff?
+  dean    Dean?
+  student Student?
+
+  @@map("users")
+}
+
+model Admin {
+  id     String @id @default(uuid())
+  userId String @unique
+
+  // Reference to the base User
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("admins")
+}
+
+model Staff {
+  id         String @id @default(uuid())
+  department String
+  userId     String @unique
+
+  // Reference to the base User
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("staff")
+}
+
+model Dean {
+  id         String @id @default(uuid())
+  department String
+  userId     String @unique
+
+  // Reference to the base User
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("deans")
+}
+
+model Student {
+  id         String @id @default(uuid())
+  department String
+  userId     String @unique
+
+  // Reference to the base User
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("students")
+}
+
+enum UserRole {
+  ADMIN
+  STAFF
+  DEAN
+  STUDENT
+}
