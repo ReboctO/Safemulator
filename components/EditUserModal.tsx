@@ -50,19 +50,22 @@ export default function EditUserModal({ user, onClose }: { user: UserWithRelatio
         body: JSON.stringify(formData),
       })
 
-      if (!response.ok) throw new Error('Failed to update user')
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to update user')
+      }
 
       router.refresh()
       onClose()
-    } catch (error) {
-      alert('Error updating user')
+    } catch (error: any) {
+      alert(`Error updating user: ${error.message}`)
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">Edit User</h2>
@@ -125,10 +128,10 @@ export default function EditUserModal({ user, onClose }: { user: UserWithRelatio
               onChange={(e) => setFormData({ ...formData, role: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option>ADMIN</option>
-              <option>DEAN</option>
-              <option>STAFF</option>
-              <option>STUDENT</option>
+              <option value="ADMIN">ADMIN</option>
+              <option value="DEAN">DEAN</option>
+              <option value="STAFF">STAFF</option>
+              <option value="STUDENT">STUDENT</option>
             </select>
           </div>
 
@@ -140,9 +143,9 @@ export default function EditUserModal({ user, onClose }: { user: UserWithRelatio
                 onChange={(e) => setFormData({ ...formData, department: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option>College of Computer Studies</option>
-                <option>Hospitality Management</option>
-                <option>Education</option>
+                <option value="College of Computer Studies">College of Computer Studies</option>
+                <option value="Hospitality Management">Hospitality Management</option>
+                <option value="Education">Education</option>
               </select>
             </div>
           )}

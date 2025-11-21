@@ -3,7 +3,7 @@ import { LayoutDashboard, Users, BarChart3, FileText, Settings } from 'lucide-re
 export const sidebarLinks = [
   {
     icon: LayoutDashboard,
-    route: "./dashboard",        // ← Relative path inside @dean slot
+    route: "./dashboard",        
     label: "Dashboard",
   },
   {

@@ -18,9 +18,7 @@ export default function AdminLayout({
 }>) {
   return (
     <>
-      <div className={`${schibstedGrotesk.variable} ${martianMono.variable} antialiased`} >
         {children}
-      </div>
       <Toaster />
     </>
   );
