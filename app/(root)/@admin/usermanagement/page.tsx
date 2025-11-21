@@ -28,4 +28,4 @@ export default async function UserManagementPage(): Promise<JSX.Element> {
   const initialUsers: User[] = result.success ? result.data : []
 
   return <UserManagementClient initialUsers={initialUsers} />
-}
+}``
